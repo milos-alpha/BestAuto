@@ -1,19 +1,24 @@
-@extends('layout')
-
-@section('title', 'Register')
-<script type="text/javascript" src="{{ asset('assets/js/register.js') }}" defer></script>
+@extends('dashboard_layout')
+@section('title', 'Create Product')
 
 @section('content')
-
 <section class="container h-[57.5vh]">
-    <form action="{{ route( 'user.register' ) }}" method="post" class="mx-auto w-full md:min-w-[50%] md:max-w-[90%] lg:max-w-[90%] flex flex-col-reverse items-center sm:items-start sm:flex-row justify-center h-auto gap-4 p-2 md:px-9 md:py-4" enctype="multipart/form-data">
+    <form action="{{ route( 'dashboard.createUsers' ) }}" method="post" class="mx-auto w-full md:min-w-[50%] md:max-w-[90%] lg:max-w-[90%] flex flex-col-reverse items-center sm:items-start sm:flex-row justify-center h-auto gap-4 p-2 md:px-9 md:py-4" enctype="multipart/form-data">
+
         @csrf
         <div class="flex w-full sm:w-auto flex-col gap-4 items-center">
-            <h1 class="text-xl font-semibold">Join Us Now</h1>
+            <h1 class="text-xl font-semibold">Add new User</h1>
             
-            <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="text" name="name" label="Full Name" placeholder="User name" required/>
+            <div class="flex flex-col sm:flex-row gap-8 w-full items-center justify-between">
+                <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" name="name" placeholder="User name" required/>
+                <select class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600"  name="role" required>
+                    <option value="user">user</option>
+                    <option value="admin">admin</option>
+                </select>
+            </div>
+
             <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="email" name="email" label="Email" placeholder="User email" required/>
-    
+
             <div class="flex flex-col sm:flex-row gap-8 w-full items-center justify-between">
                 <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="password" name="password" label="Password" placeholder="Enter your password" required/>
                 <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="password" name="password_confirmation" label="Confirm password" placeholder="confirm your password" required/>
@@ -36,7 +41,6 @@
             </div>
 
             <button type="submit" name="submit" class="w-full my-2 bg-orange-500 p-3 font-bold hover:text-white">Create User</button>
-            <p class="text-center">Already have an account? <a href="{{ route('user.login') }}" class="text-accent hover:underline">Login</a></p>
         </div>
 
         <div class="w-[300px] h-[200px] flex items-center justify-center p-3">
@@ -53,5 +57,48 @@
         </div>
     </form>
 </section>
-<x-footer />
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const inputFile = document.getElementById('input-file');
+            const imgView = document.getElementById('img-view');
+
+            inputFile.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        imgView.style.backgroundImage = `url(${e.target.result})`;
+                        imgView.innerHTML = ''; // Clear the default content
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Drag and Drop functionality
+            const dropArea = document.getElementById('drop-area');
+            dropArea.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                dropArea.classList.add('dragover');
+            });
+
+            dropArea.addEventListener('dragleave', function () {
+                dropArea.classList.remove('dragover');
+            });
+
+            dropArea.addEventListener('drop', function (e) {
+                e.preventDefault();
+                dropArea.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    inputFile.files = e.dataTransfer.files;
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        imgView.style.backgroundImage = `url(${e.target.result})`;
+                        imgView.innerHTML = ''; // Clear the default content
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
 @endsection

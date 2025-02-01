@@ -21,6 +21,8 @@ Route::post('/user/logout', [AuthController::class, 'logout'])->name('user.logou
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 Route::get('/dashboard/users', [DashboardController::class, 'users'])->name('dashboard.users');
+Route::get('/dashboard/users/add', [DashboardController::class, 'addUser'])->name('dashboard.addUsers');
+Route::post('/dashboard/users/add/create', [DashboardController::class, 'createUsers'])->name('dashboard.createUsers');
 Route::get('/dashboard/orders', [DashboardController::class, 'orders'])->name('dashboard.orders');
 Route::get('/dashboard/categories', [DashboardController::class, 'categories'])->name('dashboard.categories');
 

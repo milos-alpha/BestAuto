@@ -3,14 +3,14 @@
 @endphp
 
 <div class="relative flex items-center justify-between w-full gap-3" onclick="displayBtn(this)" id="profile_div">
-    <img src="{{asset("storage/$user->profile_image")}}" alt="pro" class="rounded-full w-[50px] h-[50px] object-cover object-center">
+    <img src="{{asset('storage/'.$user->profile_image)}}" alt="pro" class="rounded-full w-[50px] h-[50px] object-cover object-center">
     <p>{{$user->name}}</p>
     <span class="flex items-center justify-center p-2 rounded-full hover:bg-accent-light text-sm font-light -right-1 -top-1" id="">
         <i class="fas fa-chevron-down"></i>
     </span> 
 
-    <div id="sub_navbar" class="absolute top-[110%] transform tranform-origin-top scale-0 left-0 w-full transition-all duration-500 ease-in-out flex flex-col">
-        @if($user->role_id == 1)
+    <div id="sub_navbar" class="absolute right-5 top-[110%] transform tranform-origin-top scale-0 left-0 w-full transition-all duration-500 ease-in-out flex flex-col">
+        @if($user->role == "admin")
             <a href="{{route('dashboard.index')}}">
                 <x-button 
                 text="Dashboard"
@@ -20,14 +20,10 @@
             />
             </a>
         @endif
+        <!-- <a href="" class="btn-primarybtn w-full bg-black text-secondary p-3"><i class="fa-solid fa-pen-to-square"></i> Edit Profile</a> -->
         <form action="{{route('user.logout')}}" method="POST" class="">
             @csrf
-            <x-button 
-                text="Logout"
-                type="submit"
-                icon="<i class='fas fa-sign-out'></i>"
-                class="btn-primarybtn w-full bg-white text-secondary border border-border_clr"
-            />
+            <button type="submit" class="btn-primarybtn w-full bg-black text-secondary p-3"><i class='fas fa-sign-out'></i> Log Out</button>
         </form>
     </div>
 </div>

@@ -26,7 +26,7 @@ class User extends Authenticatable
         'gender',
         'profile_image',
         'dob',
-        'role_id'
+        'role'
     ];
 
     /**

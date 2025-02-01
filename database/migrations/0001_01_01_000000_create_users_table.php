@@ -21,8 +21,7 @@ return new class extends Migration
             $table->string('profile_image')->default('default.png');
             $table->string('password_hash');
             $table->date('dob');
-            $table->foreignId('role_id')->nullable()->index();
-            $table->foreign('role_id', 'fk_user_roles')->references('id')->on('roles')->onDelete('CASCADE')->onUpdate('CASCADE');
+            $table->enum('role', ['admin', 'user'])->default('user');
             $table->timestamps();
         });
 
