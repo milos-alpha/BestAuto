@@ -11,16 +11,16 @@
         <div class="flex w-full sm:w-auto flex-col gap-4 items-center">
             <h1 class="text-xl font-semibold">Join Us Now</h1>
             
-            <x-input type="text" name="name" label="Full Name" placeholder="User name" required/>
-            <x-input type="email" name="email" label="Email" placeholder="User email" required/>
+            <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="text" name="name" label="Full Name" placeholder="User name" required/>
+            <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="email" name="email" label="Email" placeholder="User email" required/>
     
             <div class="flex flex-col sm:flex-row gap-8 w-full items-center justify-between">
-                <x-input type="password" name="password" label="Password" placeholder="Enter your password" required/>
-                <x-input type="password" name="password_confirmation" label="Confirm password" placeholder="confirm your password" required/>
+                <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="password" name="password" label="Password" placeholder="Enter your password" required/>
+                <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="password" name="password_confirmation" label="Confirm password" placeholder="confirm your password" required/>
             </div>
     
             <div class="flex flex-col sm:flex-row gap-8 w-full items-center justify-between">
-                <x-input type="text" name="address" label="Address" placeholder="Enter your address" required/>
+                <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="text" name="address" label="Address" placeholder="Enter your address" required/>
                 <div class="w-full flex flex-col">
                     <label for="gender">Gender</label>
                     <select class="border-2 border-border_clr outline-none p-2 focus:border-accent transition-all ease-in-out duration-600" name="gender" id="gender">
@@ -31,11 +31,11 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-8 w-full items-center justify-between">
-                <x-input type="text" name="phone" label="phone" placeholder="Enter phone number" required/>
-                <x-input type="date" name="dob" max="{{ date('Y-m-d') }}" label="Date of Birth" required/>
+                <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="text" name="phone" label="phone" placeholder="Enter phone number" required/>
+                <input class="border-2 w-full border-border_clr outline-none p-2 focus:border-accent transition-all bg-none ease-in-out duration-600" type="date" name="dob" max="{{ date('Y-m-d') }}" label="Date of Birth" required/>
             </div>
 
-            <x-button type="submit" name="submit" text="Create User" class="w-full my-2 btn-secondarybtn"/>
+            <button type="submit" name="submit" class="w-full my-2 btn-secondarybtn">Create User</button>
             <p class="text-center">Already have an account? <a href="{{route("user.login")}}" class="text-accent hover:underline">Login</a></p>
         </div>
 

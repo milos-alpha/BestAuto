@@ -12,12 +12,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // $products = Product::all();
-        $hero_bg = '8.jpg';
-        $col_bg_1 = '12.jpg';
-        $col_bg_2 = 'Frame 5.png';
-
-        return view("home.index", compact('hero_bg', 'col_bg_1', 'col_bg_2'));
+        $products = Product::all();
+        return view("home.index", compact("products"));
     }
 
     /**
@@ -37,19 +33,20 @@ class ProductController extends Controller
             'name' => 'required|string|max:64',
             'price' => 'required|numeric|decimal:0,2',
             'description' => 'nullable|string|min:5',
-            'stock' => 'required|numeric',
+            'category' => 'required|in:car,bike',
+            'stock' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,webp,ico,svg,jiff|max:2048',
         ]);
 
+        // Handle image upload
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('product_images', 'public');
         }
 
+        // Create the product
         Product::create($validated);
-        session([
-            'status' => 'success',
-            "message"=>"product creation was successful"
-        ]);
+        session()->flash('status', 'success');
+        session()->flash('message', 'Product creation was successful');
 
         return redirect()->route('dashboard.index');
     }

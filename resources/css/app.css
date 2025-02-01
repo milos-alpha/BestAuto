@@ -16,7 +16,7 @@
         @apply px-4 py-2 font-medium text-base min-w-32 min-h-[45px] transition duration-150 ease-in-out;
     }
     .btn-primarybtn {
-        @apply bg-accent text-white hover:opacity-75;
+        @apply bg-orange-500 text-white hover:opacity-75;
     }
     .btn-secondarybtn {
         @apply bg-primary text-white hover:opacity-75 border border-border_clr;
@@ -24,8 +24,12 @@
     .bg-primary {
         @apply bg-orange-500;
     }
-    .border-border_clr {
+    /* for the text */
+    .primary { 
         @apply bg-orange-500;
+    }
+    .border-border_clr {
+        @apply bg-gray-200;
     }
 }
 

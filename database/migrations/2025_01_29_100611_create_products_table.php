@@ -18,9 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->unsignedInteger('stock')->default(0);
             $table->string('image')->default('defaultPic.png');
-            $table->foreignId('age_category_id');
-            $table->foreign('age_category_id')->references('id')->on('age_categories')->onDelete('CASCADE')->onUpdate('CASCADE')->index();
-            $table->foreignId('sales_category_id')->references('id')->on('sales_categories')->onDelete('CASCADE')->onUpdate('CASCADE');
+            $table->string('category')->default('Car');
             $table->decimal('discount', 10, 2)->default(0.0)->nullable();
             $table->timestamps();
         });

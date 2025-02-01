@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BestAuto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     @vite('resources/css/app.css')
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -21,63 +22,72 @@
     </style>
 </head>
 <body>
-<nav class="container flex items-center justify-between mb-8">
-    <div id="navbar" class="flex items-center space-x-6">
-        <a href="#" class="logo-transition text-2xl font-extrabold hover:text-orange-400 hover:text-4xl">
+    <!-- Navbar -->
+    <nav class="container flex items-center justify-between py-4">
+        <!-- Logo -->
+        <a href="#" class="logo-transition text-2xl font-extrabold hover:text-orange-400">
             Best<span class="text-orange-400 hover:text-black">Auto</span>
         </a>
-        <div class="space-x-6">
-            <a id="{{Route::is('home.index') ? 'active-link': ''}}" href="{{route('home.index')}}" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">Home</a>
+
+        <!-- Desktop Navigation Links -->
+        <div class="hidden md:flex items-center space-x-6">
+            <a id="{{ Route::is('home.index') ? 'active-link' : '' }}" href="{{ route('home.index') }}" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">Home</a>
             <a href="/about" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">About Us</a>
             <a href="/services" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">Services</a>
             <a href="/contact" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">Electric Car</a>
         </div>
-    </div>
-    <a href="{{route('cart.index')}}" class="relative">
-        <x-button
-            type="button"
-            title='cart'
-            class="bg-transparent text-black min-w-[20px] min-h-[20px] w-[40px] h-[40px] hover:hover:bg-orange-400 rounded-full"
-            icon="<i class='fas fa-shopping-cart'></i>"
-        />
-        <span class="absolute h-5 w-5 flex items-center justify-center p-[2px] rounded-full bg-black text-white text-xs font-light -right-1 -top-1">
-            {{ session('cart') ? count(session('cart')) : 0 }}
-        </span>
-    </a>
-            <div class="flex flex-col ml-1 md:flex-row md:gap-[2px] items-center">
+
+        <!-- Cart and User Actions -->
+        <div class="flex items-center space-x-4">
+            <!-- Cart Button -->
+            <a href="{{ route('cart.index') }}" class="relative">
+                <x-button
+                    type="button"
+                    title="Cart"
+                    class="bg-transparent text-black min-w-[20px] min-h-[20px] w-[40px] h-[40px] hover:bg-orange-400 rounded-full"
+                    icon="<i class='fas fa-shopping-cart'></i>"
+                />
+                <span class="absolute h-5 w-5 flex items-center justify-center p-[2px] rounded-full bg-black text-white text-xs font-light -right-1 -top-1">
+                    {{ session('cart') ? count(session('cart')) : 0 }}
+                </span>
+            </a>
+
+            <!-- User Actions -->
+            <div class="flex items-center space-x-2">
                 @if(Auth::check())
                     <x-profile_info />
                 @else
-                    <a href="{{route('user.login')}}">
-                        <x-button
-                            type="button"
-                            text="Login"
-                            class="bg-transparent text-black min-w-fit hover:bg-accent-light w-[90px]"
-                        />
+                    <a href="{{ route('user.login') }}">
+                    <button class="bg-transparent font-bold p-3 hover:text-white text-black min-w-fit hover:bg-orange-400 w-[90px]">Login</button>
                     </a>
-                    <hr class="w-0 md:w-[1px] md:h-8 border-none bg-slate-200">
-                    <a href="{{route('user.register')}}">
-                        <x-button
-                            type="button"
-                            text="Join Us"
-                            class="bg-transparent text-black min-w-fit hover:bg-accent-light w-[90px]"
-                        />
+                    <span class="hidden md:block w-[1px] h-6 bg-slate-200"></span>
+                    <a href="{{ route('user.register') }}">
+                        <button class="bg-transparent font-bold p-3 hover:text-white text-black min-w-fit hover:bg-orange-400 w-[90px]">Join Us</button>
                     </a>
                 @endif
             </div>
         </div>
 
-        <a class="relative md:hidden" href="" class="relative">
-            <x-button
-                type="button"
-                title='cart'
-                class="bg-transparent text-black min-w-[20px] min-h-[20px] w-[40px] h-[40px] hover:bg-accent-light rounded-full"
-                icon="<i class='fas fa-shopping-cart'></i>"
-            />
-            <span class="absolute h-5 w-5 flex items-center justify-center p-[2px] rounded-full bg-black text-white text-xs font-light -right-1 -top-1">
-                0
-            </span>
-        </a>
+        <!-- Mobile Menu Button (Optional) -->
+        <button class="md:hidden p-2 focus:outline-none" aria-label="Toggle Menu">
+            <i class="fas fa-bars text-2xl"></i>
+        </button>
     </nav>
+
+    <!-- Mobile Navigation Links (Hidden by Default) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-100 p-4">
+        <a href="{{ route('home.index') }}" class="block nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold py-2">Home</a>
+        <a href="/about" class="block nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold py-2">About Us</a>
+        <a href="/services" class="block nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold py-2">Services</a>
+        <a href="/contact" class="block nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold py-2">Electric Car</a>
+    </div>
+
+    <!-- Script for Mobile Menu Toggle -->
+    <script>
+        document.querySelector('button[aria-label="Toggle Menu"]').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

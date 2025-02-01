@@ -10,8 +10,7 @@ class Product extends Model
         'description',
         'price',
         'stock',
-        'age_category_id',
-        'sales_category_id',
+        'category',
         'image',
         'discount',
     ];
