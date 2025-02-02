@@ -63,17 +63,11 @@
             
             <ul class="sub-menu">
                  <div>
-                     <li class="{{Route::is('dashboard.categories')? 'active' : ''}}">
-                         <a href="{{route('dashboard.categories')}}">All</a>
+                     <li>
+                         <a href="">Cars</a>
                      </li>
                      <li>
-                         <a href="#">Human Hair</a>
-                     </li>
-                     <li>
-                         <a href="">Virgin Hair</a>
-                     </li>
-                     <li>
-                         <a href="">Capless Wigs</a>
+                         <a href="">Bikes</a>
                      </li>
                  </div>
             </ul>

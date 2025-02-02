@@ -5,12 +5,16 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/", [ProductController::class, 'index'])->name('home.index');
+Route::get("/products", [HomeController::class, 'products'])->name('home.products');
+Route::get("/products/search", [HomeController::class, 'search'])->name('home.search');
 
 Route::get("/products/add", [ProductController::class,"create"])->name("product.create");
 Route::post("/products/add", [ProductController::class,"store"])->name("product.store");
+Route::delete("/products/{product}", [ProductController::class,"destroy"])->name("product.delete");
 
 // User handlers
 Route::get("/user/register", [UserController::class, 'create'])->name("user.register");

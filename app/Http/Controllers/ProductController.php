@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -80,6 +81,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        try {
+            $product->delete();
+            return redirect()->route('dashboard.index')->with('success', 'Product Successfully deleted.');
+        } catch(\Exception $e){
+            return back()->with('error', 'Error deleting the product');
+        }
     }
 }

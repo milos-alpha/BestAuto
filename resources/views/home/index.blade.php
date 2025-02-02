@@ -97,7 +97,6 @@
             </div>
         </div>
     </section>
-
     <!-- Featured Products Section -->
     <section class="container mx-auto px-4 py-16">
         <div class="flex flex-col gap-8">
@@ -107,31 +106,47 @@
             </div>
             
             <!-- Product Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                @if(isset($products))
-                    @foreach ($products as $product)
-                        <div class="bg-white rounded-2xl overflow-hidden shadow-lg group">
-                            <div class="aspect-w-16 aspect-h-9 w-full">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                @if(isset($products) && $products->count() > 0)
+                    @foreach ($products->take(4) as $product)
+                        <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <div class="relative">
                                 <img 
                                     src="{{ asset('storage/' . $product->image) }}" 
                                     alt="{{ $product->name }}"
-                                    class="w-full h-[200px] object-cover"
+                                    class="w-full h-48 object-cover object-center"
                                 >
-                            </div>
-                            <div class="p-6">
-                                <h3 class="text-xl font-semibold text-gray-900">{{ $product->name }}</h3>
-                                <button onclick="showProductDetails('{{$product->descriptions}}')" class="text-gray-600 mt-2">More details. . . .</p>
-                                <div class="mt-4 flex flex-col gap-5 justify-between items-center">
-                                    <span class="text-2xl font-bold text-orange-500">${{ number_format($product->price, 2) }}</span>
-                                    <form action="{{ route('cart.add') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" name="quantity" value="1">
-                                        <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors">
-                                            Add to Cart
-                                        </button>
-                                    </form>
+                                <div class="absolute top-4 right-4">
+                                    <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                        New
+                                    </span>
                                 </div>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="space-y-2">
+                                    <h3 class="text-xl font-semibold text-gray-900">{{ $product->name }}</h3>
+                                    <p class="text-gray-500 line-clamp-2 text-sm">{{ Str::limit($product->description, 100) }}</p>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-2xl font-bold text-orange-500">${{ number_format($product->price, 2) }}</span>
+                                    <button 
+                                        onclick="openModal('{{ $product->name }}', '{{ $product->description }}')" 
+                                        class="text-orange-500 hover:text-orange-600 text-sm font-semibold"
+                                    >
+                                        View Details
+                                    </button>
+                                </div>
+                                <form action="{{ route('cart.add') }}" method="POST" class="pt-2">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                        </svg>
+                                        Add to Cart
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     @endforeach
@@ -177,18 +192,65 @@
     <footer class="bg-gray-900 text-white">
         <x-footer />
     </footer>
-    <x-product-details/>
+    <!-- Product Modal -->
+    <div id="productModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" aria-hidden="true"></div>
+        
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-lg">
+                <div class="px-6 pt-6 pb-4">
+                    <div class="flex items-start justify-between">
+                        <h3 class="text-2xl font-semibold text-gray-900" id="modalTitle"></h3>
+                        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-gray-600" id="modalDescription"></p>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-6 py-4 flex justify-end">
+                    <button onclick="closeModal()" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Bootstrap JS (required for the modal) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function showProductDetails(description) {
-            // Set the product description in the modal
-            document.getElementById('productDescription').innerText = description;
-            // Show the modal
-            const modal = new bootstrap.Modal(document.getElementById('productModal'));
-            modal.show();
+<script>
+    function openModal(title, description) {
+        const modal = document.getElementById('productModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        
+        modalTitle.textContent = title;
+        modalDescription.textContent = description;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('productModal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('productModal').addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeModal();
         }
-    </script>
+    });
+
+    // Close modal on escape key press
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && !document.getElementById('productModal').classList.contains('hidden')) {
+            closeModal();
+        }
+    });
+</script>
 </body>
 </html>

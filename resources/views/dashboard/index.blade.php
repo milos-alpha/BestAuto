@@ -88,7 +88,13 @@
                             <!-- Action Buttons -->
                             <td class="text-xl text-secondary">
                                 <div class="flex items-center gap-2">
-                                    <!-- Edit Button -->
+                                    <form action="{{ route('product.delete', $product->id) }} " method="POST" class="bg-red-500 text-[15px] font-bold p-3">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this product ?')">
+                                            <i class="fa-solid fa-trash"></i> Delete Product
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

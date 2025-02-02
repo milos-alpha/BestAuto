@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth; // Correct import
 use App\Models\Product;
 
 class CartController extends Controller
@@ -14,39 +15,46 @@ class CartController extends Controller
      */
     public function index()
     {
-
         $cart = Session::get('cart', []);
-        unset($cart['3']);
+        unset($cart['3']); // Remove item with key '3' from the cart
         return view('cart.index', compact('cart'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Add a product to the cart.
      */
     public function add(Request $request)
     {
-        $product = Product::findOrFail($request->product_id);
+        if (Auth::check()) {
+            $product = Product::findOrFail($request->product_id);
 
-        $cart = Session::get('cart', []);
+            $cart = Session::get('cart', []);
 
-        $productId = $request->input('product_id');
-        $quantity = $request->input('quantity', 1);
+            $productId = $request->input('product_id');
+            $quantity = $request->input('quantity', 1);
 
-        if (isset($cart[$productId])) {
-            $cart[$productId]['quantity'] += (int)$quantity; // Increment quantity if exists
+            if (isset($cart[$productId])) {
+                $cart[$productId]['quantity'] += (int)$quantity;
+            } else {
+                $cart[$productId]['name'] = $product->name;
+                $cart[$productId]['quantity'] = $quantity;
+                $cart[$productId]['image'] = $product->image;
+                $cart[$productId]['price'] = $product->price;
+                $cart[$productId]['description'] = $product->description;
+            }
+
+            Session::put('cart', $cart);
+            return redirect()->back()->with('success', 'Product added to cart');
         } else {
-            $cart[$productId]['name'] = $product->name;
-            $cart[$productId]['quantity'] = $quantity; // Add new item
-            $cart[$productId]['image'] = $product->image;
-            $cart[$productId]['price'] = $product->price;
-            $cart[$productId]['description'] = $product->description;
+            return redirect()->route('user.login')->with('error', 'Please login to your account before adding to cart.');
         }
-        
-        Session::put('cart', $cart);
-        return redirect()->back()->with('success', 'Product added to cart');
     }
 
-    public function remove(Request $request){
+    /**
+     * Remove a product from the cart.
+     */
+    public function remove(Request $request)
+    {
         $cart = session()->get('cart', []);
         $product_id = $request->input('product_id');
 
@@ -57,6 +65,9 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Product removed from cart!');
     }
 
+    /**
+     * Edit the quantity of a product in the cart.
+     */
     public function edit(Request $request)
     {
         $cart = session()->get('cart', []);
@@ -66,7 +77,7 @@ class CartController extends Controller
         if (isset($cart[$product_id])) {
             if ($operation === 'add') {
                 $cart[$product_id]['quantity'] += 1;
-            } else{
+            } else {
                 $new_quantity = $cart[$product_id]['quantity'] - 1;
                 if ($new_quantity < 1) {
                     unset($cart[$product_id]);
@@ -78,6 +89,7 @@ class CartController extends Controller
         }
         return redirect()->back()->with('success', 'Product quantity updated!');
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -95,10 +107,6 @@ class CartController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Cart $cart)
@@ -111,6 +119,6 @@ class CartController extends Controller
      */
     public function destroy(Cart $cart)
     {
-       $cart->delete();
+        $cart->delete();
     }
 }

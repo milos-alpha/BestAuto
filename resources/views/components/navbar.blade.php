@@ -33,14 +33,17 @@
         <div class="hidden md:flex items-center space-x-6">
             <a id="{{ Route::is('home.index') ? 'active-link' : '' }}" href="{{ route('home.index') }}" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">Home</a>
             <a href="/about" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">About Us</a>
-            <a href="/services" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">Services</a>
-            <a href="/contact" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">Electric Car</a>
+            <!-- <a href="/contact" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">Electric Car</a> -->
+            @if(Auth::check())
+                <a id="{{ Route::is('home.products') ? 'active-link' : '' }}" href="{{route('home.products')}}" class="nav-link text-gray-600 hover:text-orange-400 hover:underline font-extrabold">Products</a>
+            @endif
         </div>
 
         <!-- Cart and User Actions -->
         <div class="flex items-center space-x-4">
             <!-- Cart Button -->
             <a href="{{ route('cart.index') }}" class="relative">
+                @if(Auth::check())
                 <x-button
                     type="button"
                     title="Cart"
@@ -54,7 +57,6 @@
 
             <!-- User Actions -->
             <div class="flex items-center space-x-2">
-                @if(Auth::check())
                     <x-profile_info />
                 @else
                     <a href="{{ route('user.login') }}">
